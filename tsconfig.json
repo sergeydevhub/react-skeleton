@@ -1,0 +1,37 @@
+{
+  "extends": "./node_modules/react-redux-typescript-scripts/tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/*.spec.*",
+    "src/**/*.test.*",
+    "configs",
+    "scripts"
+  ],
+  "include": [
+    "src",
+    "typings"
+  ],
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": "./",
+    "target": "es2018",
+    "forceConsistentCasingInFileNames": false,
+    "types": [
+      "node",
+      "webpack-env",
+      "facebook-js-sdk"
+    ],
+    "paths": {
+      "@core/*": [
+        "src/core/*"
+      ],
+      "@theme": [
+        "src/theme"
+      ],
+      "@app/*": [
+        "src/app/*"
+      ]
+    }
+  }
+}
