@@ -45,7 +45,7 @@ const reducer: Reducer = (
 ) => produce(state, (draft: Draft<StoreModels.Profile>) => {
   const handlers = {
     [login.successful.type]: () => {
-      draft = Models.ProfileModelDTO.deserialize(action.payload) as StoreModels.Profile;
+      draft = Models.ProfileModelFormatter.deserialize(action.payload) as StoreModels.Profile;
       draft.status = {
         ...initialState.status,
         ...action.status,

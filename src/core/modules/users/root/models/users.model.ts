@@ -2,7 +2,7 @@ import ReduxTypes from 'ReduxTypes';
 import { UserRecord, User } from "./types";
 import {ProfileRecord} from "@core/modules/profile/root/models";
 
-export class UsersModelDTO implements ReduxTypes.DTO<User, UserRecord> {
+export class UsersModelFormatter implements ReduxTypes.Formatter<User, UserRecord> {
   static serialize(user: User): Partial<UserRecord> {
     const {firstName, lastName, ...rest} = user;
     const record: Partial<ProfileRecord> = {

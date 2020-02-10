@@ -20,7 +20,7 @@ declare module 'ReduxTypes' {
     InferActions<Record<string, Action>>
   >
 
-  export interface DTO<U, T> {
+  export interface Formatter<U, T> {
     serialize?(obj: U): Partial<T>;
     deserialize?(obj: T): Partial<U>;
   }

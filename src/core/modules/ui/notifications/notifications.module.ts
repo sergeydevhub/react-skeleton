@@ -6,7 +6,7 @@ import {Reducer} from "redux";
 import { RootError } from "@core/errors/variations";
 
 class NotificationsModule extends ReduxModuleHelper {}
-const notificationModule = new NotificationsModule('notifications');
+const notificationsModule = new NotificationsModule('notifications');
 
 const getInstance = (state: ReduxTypes.RootState) => state.ui.notifications;
 
@@ -30,8 +30,8 @@ interface NotificationPayload {
   message: string | RootError
 }
 
-const showNotification = notificationModule.sync<NotificationPayload>('show');
-const hideNotification = notificationModule.sync<keyof Notifications>('hide');
+const showNotification = notificationsModule.sync<NotificationPayload>('show');
+const hideNotification = notificationsModule.sync<keyof Notifications>('hide');
 
 const actions = {
  showNotification,
@@ -84,7 +84,7 @@ export {
   filters,
   actions,
   selectors,
-  notificationModule,
+  notificationsModule,
   NotificationsModule,
   reducer,
   initialState

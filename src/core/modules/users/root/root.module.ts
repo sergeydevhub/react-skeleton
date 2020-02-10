@@ -1,5 +1,5 @@
 import StoreModels from 'StoreModels';
-import { UsersModelDTO } from "./models/users.model";
+import { UsersModelFormatter } from "./models/users.model";
 import { UserRecord, User } from "./models";
 import { Reducer } from 'redux';
 import produce, { Draft } from 'immer';
@@ -37,7 +37,7 @@ const reducer: Reducer = (
 
     [getAll.successful.type]: () => {
       action.payload.map((userRecord: UserRecord) => {
-        draft[userRecord.id] = UsersModelDTO.deserialize(userRecord) as User;
+        draft[userRecord.id] = UsersModelFormatter.deserialize(userRecord) as User;
       })
     },
 
