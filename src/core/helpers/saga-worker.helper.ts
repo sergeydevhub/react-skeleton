@@ -2,7 +2,6 @@ import { StatefulActionCreators } from './redux-module.helper';
 import { SagaIterator } from 'redux-saga';
 import { call, put, cancelled } from 'redux-saga/effects';
 import { ActionError } from "@core/errors/variations";
-import capitalize from 'lodash/capitalize';
 import { actions as notificationActions } from '@core/modules/ui/notifications';
 
 type Worker = (props: any, ...args: Array<any>) => Promise<any> | SagaIterator
@@ -58,7 +57,7 @@ function sagaWorkerHelper(
       return fn;
     }
 
-    return setNaming(requestProcessing, capitalize(worker.name))
+    return setNaming(requestProcessing, worker.name)
   };
 
   return helper;
