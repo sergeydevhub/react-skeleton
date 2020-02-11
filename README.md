@@ -1,4 +1,4 @@
-##Features
+## Features
 - Strict typed React skeleton based on TypeScript
 - Webpack flexible configs composition
 - Redux-saga util for req/res flow
