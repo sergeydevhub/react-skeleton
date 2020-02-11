@@ -3,19 +3,20 @@
 - Webpack flexible configs composition
 - Redux-saga util for req/res flow
 - Enhanced Redux module helpers designed to reduce verbose & complexity  
-- Sentry errors logging 
+- Sentry for any errors logging 
 - Dark/Light themes
 - Lazy loading components
 - Protected routes
 - Components preloaders  
 - Routes animated transition
-- Errors handlers React Container & Redux Middleware 
+- Errors handling React container
 - Form validation mechanism & validators schema
 - User warnings about page close & form incomplete
 - Helmet for doc head management 
 - User toast notifications
 - Customized Material UI
 - Service worker & redux store offline mode 
+- Redux Middleware errors capturing
 - The Main & Auth layouts
 - Typed localization
 - Not found page  
