@@ -3,7 +3,7 @@
 - Webpack flexible configs composition
 - Redux-saga util for req/res flow
 - Enhanced Redux module helpers designed to reduce verbose & complexity  
-- Sentry for any errors logging 
+- Sentry errors tracking 
 - Dark/Light themes
 - Lazy loading components
 - Protected routes
