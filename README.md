@@ -25,4 +25,4 @@
 - SocketIO transport layer bounded to Redux-Saga 
 - The list of typed Exceptions/Errors, with messages pattern related to corresponded translation
 - Redux custom types
-- Data serialization 
+- Data formatting 
