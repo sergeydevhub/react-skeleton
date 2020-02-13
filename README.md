@@ -9,13 +9,13 @@
 - Protected routes
 - Components preloaders  
 - Routes animated transition
-- Errors handling React container
+- React errors handling container
 - Form validation mechanism & validators schema
 - User warnings about page close & form incomplete
 - Helmet for doc head management 
 - User toast notifications
 - Customized Material UI
-- Service worker & redux store offline mode 
+- Service worker & redux store simple offline mode 
 - Redux Middleware errors capturing
 - The Main & Auth layouts
 - Typed localization
