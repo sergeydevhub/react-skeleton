@@ -12,6 +12,12 @@ const stackTraceHandling = (
   }
 };
 
+type IsExists = <M extends string, T>(message: M, obj: T) => boolean;
+
+const checkExists: IsExists = (message, obj) => {
+  return message in obj
+};
+
 export class RootError extends Error {
   protected readonly _statusCode?: HttpStatusCodes | WSStatusCodes | undefined;
 

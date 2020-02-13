@@ -3,6 +3,7 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, cancelled } from 'redux-saga/effects';
 import { ActionError } from "@core/errors/variations";
 import { actions as notificationActions } from '@core/modules/ui/notifications';
+import * as Sentry from '@sentry/browser';
 
 type Worker = (props: any, ...args: Array<any>) => Promise<any> | SagaIterator
 
@@ -20,12 +21,14 @@ function sagaWorkerHelper(
         const successful = yield put(actionCreators.successful({ payload }));
 
         return { successful };
-      } catch ({ message }) {
-        const error = new ActionError(actionCreators.failure.type, message);
+      } catch (e) {
+        Sentry.captureException(e);
+
+        const error = new ActionError(actionCreators.failure.type);
         yield put(notificationActions.showNotification({
           payload: {
             variant,
-            message
+            message: error.message
           }
         }));
         const failure = yield put(actionCreators.failure({ data, error }));

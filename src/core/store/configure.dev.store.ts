@@ -17,12 +17,11 @@ function configureStore(history: History): Store {
     error: Error, { sagaStack }
     ) => Sentry.captureException(error);
 
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
   const sagaOptions = {
     onError
   };
-
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
 
   const sagaMiddleware = setupSagaMiddleware(sagaOptions);
   const middlewares: Array<Middleware> = [

@@ -2,9 +2,12 @@ import React from 'react';
 import MuiTextField, { TextFieldProps } from "@material-ui/core/TextField";
 import { FieldProps, getIn } from "formik";
 
-type Props = & FieldProps
-  & Omit<TextFieldProps, 'name' | 'onChange' | 'error' | 'value'>
-  & { variant: 'filled' | 'standard' | 'outlined' | undefined }
+type ExcludeTypes = 'name' | 'onChange' | 'error' | 'value';
+type Variant = 'filled' | 'standard' | 'outlined' | undefined;
+
+type Props = & Omit<TextFieldProps, ExcludeTypes>
+             & Record<'variant', Variant>
+             & FieldProps
 
 export const TextField: React.ComponentType<Props> = ({ children, field, form, ...props }: Props) => {
   const { name } = field;
@@ -23,6 +26,7 @@ export const TextField: React.ComponentType<Props> = ({ children, field, form, .
     disabled,
     error
   } as TextFieldProps;
+
   return (
     <MuiTextField {...options}>
       { children }

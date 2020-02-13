@@ -5,5 +5,4 @@ export * from './types';
 export {
   en,
   ru,
-  Types
 }
