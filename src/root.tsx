@@ -32,7 +32,7 @@ const Wrapper: React.ExoticComponent<
 type Props = {};
 type State = {};
 
-export default class Root extends React.PureComponent<Props, State> {
+export default class Root extends React.Component<Props, State> {
   render() {
     return (
       <Wrapper>
