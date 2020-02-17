@@ -15,9 +15,15 @@ type Props = RouteProps & ConnectedProps<typeof connector>;
 type State = {};
 
 class AuthProtectedRoute extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+  }
+
+  checkAccess = () => this.props.status.isAuthenticated;
+
   render() {
     return (
-      <ProtectedRoute { ...this.props } routeGuard={ () => this.props.status.isAuthenticated }>
+      <ProtectedRoute { ...this.props } routeGuard={ this.checkAccess }>
         { this.props.children }
       </ProtectedRoute>
     )
