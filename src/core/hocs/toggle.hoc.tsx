@@ -36,7 +36,7 @@ export const withToggle: WithHoc = <BaseProps extends {}>(
     render() {
       return (
         <WrappedComponent
-          {...this.props as HocProps }
+        {...this.props as HocProps }
           toggle={this.toggle}
           isToggledOn={ this.state.isToggledOn }
         />
