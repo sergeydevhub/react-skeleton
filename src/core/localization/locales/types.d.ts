@@ -18,7 +18,8 @@ export interface TransportErrorsTranslation {
 
 export interface PageErrorsTranslation {
   notFound: string,
-  crash: string
+  crash: string,
+  error: string
 }
 
 export interface ErrorsTranslation {

@@ -2,7 +2,8 @@ import * as Types from '../types';
 
 const page: Types.PageErrorsTranslation = {
   notFound: 'Page not found',
-  crash: 'Page accidentally crashed'
+  crash: 'Page accidentally crashed',
+  error: 'Something goes wrong'
 };
 
 const transport: Types.TransportErrorsTranslation = {
