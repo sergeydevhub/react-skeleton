@@ -6,14 +6,14 @@ import { withToggle, InjectedProps } from "@core/hocs";
 import styles from './styles';
 
 //TODO include withToggle and it InjectedProps
-type Props = WithStyles<typeof styles> & {};
+export type LayoutProps = WithStyles<typeof styles> & {};
 
-type State = {
+export type LayoutState = {
   isToggledOn: boolean
 }
 
-class MainLayout extends React.PureComponent<Props, State> {
-  state: State = {
+class MainLayout extends React.PureComponent<LayoutProps, LayoutState> {
+  state: LayoutState = {
     isToggledOn: false
   };
 
