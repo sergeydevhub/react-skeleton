@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RouteProps } from "react-router";
 import ProtectedRoute from './protected.routing';
-import { selectors } from '@core/modules/profile/root';
+import { IProfile, selectors } from '@modules/profile/root';
 import * as ReduxTypes from "ReduxTypes";
 
 const mapStateToProps = (state: ReduxTypes.RootState) => ({
@@ -19,7 +19,7 @@ class AuthProtectedRoute extends React.Component<Props, State> {
     super(props);
   }
 
-  checkAccess = () => this.props.status.isAuthenticated;
+  checkAccess = () => !this.props?.status?.isGuest;
 
   render() {
     return (

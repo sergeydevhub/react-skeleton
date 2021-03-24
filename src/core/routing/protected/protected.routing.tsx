@@ -1,5 +1,5 @@
 import React from 'react';
-import { paths } from "@core/configs/router-paths.config";
+import { paths } from "../routes";
 import {Redirect, RedirectProps, Route, RouteProps} from "react-router";
 
 type RouteGuardResult = boolean;
