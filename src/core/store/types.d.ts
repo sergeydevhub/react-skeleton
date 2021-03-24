@@ -1,27 +1,25 @@
-import { Reducer } from 'redux';
 import { Action } from '@core/helpers'
+import { Reducer } from 'redux';
+import { InferActions } from "@core/helpers/redux";
 
-type StateType<
-  ReducerOrMap extends any
-  > = ReducerOrMap extends Reducer<any, any>
-  ? ReturnType<ReducerOrMap>
-  : ReducerOrMap extends Record<any, any>
-    ? { [K in keyof ReducerOrMap]: StateType<ReducerOrMap[K]> }
+export type LocalStorageAllowedKeys = 'STORE' | 'accessToken' | 'expireAt';
+
+type TStateType<
+  TReducerOrMap extends any
+  > = TReducerOrMap extends Reducer<any, any>
+  ? ReturnType<TReducerOrMap>
+  : TReducerOrMap extends Record<any, any>
+    ? { [K in keyof TReducerOrMap]: TStateType<TReducerOrMap[K]> }
     : never;
 
 declare module 'ReduxTypes' {
-  export type RootState = StateType<
-    ReturnType<typeof import('./root.reducer').default>
-  >;
+    // @ts-check
+    /** @type {import('./root.reducer')} */
+  export type RootState = ReturnType<typeof import('@modules/app/root').rootReducer>
 
-  export type InferActions<T> = T extends { [key: string]: infer U } ? U : never;
+  export type RootAction<Actions extends Record<string, Action>> = ReturnType<InferActions<Actions>>
 
-  export type RootAction = ReturnType<
-    InferActions<Record<string, Action>>
-  >
+  export type StatePartitions = 'app' | 'ui' | 'users' | 'profile' | 'router' | 'notifications' | 'theme' | 'localization';
 
-  export interface Formatter<U, T> {
-    serialize?(obj: U): Partial<T>;
-    deserialize?(obj: T): Partial<U>;
-  }
+  export type State<T extends object = object> = T | Array<T> | Record<keyof T, T> | Array<any> | Record<string | number, any>;
 }

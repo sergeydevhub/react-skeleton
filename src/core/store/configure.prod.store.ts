@@ -1,21 +1,21 @@
-import { compose, applyMiddleware, createStore } from 'redux';
+import { compose, applyMiddleware, createStore, Reducer } from 'redux';
+import { history } from '@core/routing';
 import { routerMiddleware } from 'connected-react-router';
 import setupSagaMiddleware, { SagaMiddlewareOptions } from 'redux-saga';
-import { Middleware, StoreEnhancer, Store } from 'redux';
-import rootReducer from './root.reducer';
-import { History } from "history";
-import rootSaga from './root.saga';
+import { Saga } from '@redux-saga/types';
 import * as Sentry from '@sentry/browser';
+import { Middleware, StoreEnhancer, Store } from 'redux'
 import { ErrorHandlingMiddleware } from '@core/middlewares';
+import * as browserStorage from "./browser.storage";
 import throttle from 'lodash/throttle';
-import * as storageManager from "@core/store/browser.store";
 
-function configureStore(history: History): Store {
-  const initialState = storageManager.load();
+function configureStore(rootReducer: Reducer, rootSaga: Saga): Store {
+  const savedData = browserStorage.load(browserStorage.STORAGE_KEY) ;
+  const initialState = !savedData ? {} : savedData;
 
   const onError: SagaMiddlewareOptions["onError"] = (
     error: Error, { sagaStack }
-    ) => Sentry.captureException(error);
+  ) => Sentry.captureException(error);
 
   const sagaOptions = {
     onError
@@ -28,23 +28,26 @@ function configureStore(history: History): Store {
     ErrorHandlingMiddleware
   ];
 
-  const enhancers: Array<StoreEnhancer> = [
-    applyMiddleware(...middlewares)
-  ];
+  const enhancers: StoreEnhancer = applyMiddleware(...middlewares);
+
+  if (module.hot) {
+    module.hot.accept();
+  }
 
   const store: Store = createStore(
-    rootReducer(history),
+    rootReducer,
     initialState,
-    compose(...enhancers)
+    compose(enhancers)
   );
 
   sagaMiddleware.run(rootSaga);
 
   store.subscribe(
     throttle(() =>
-      storageManager.save(
+      browserStorage.save(
+        browserStorage.STORAGE_KEY,
         store.getState()
-      ), 1000)
+      ), 1500)
   );
 
   return store

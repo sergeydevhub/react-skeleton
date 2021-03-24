@@ -1,17 +1,17 @@
-import { compose, applyMiddleware, createStore } from 'redux';
-import { History } from "history";
+import { compose, applyMiddleware, createStore, Reducer } from 'redux';
+import { history } from '@core/routing';
 import { routerMiddleware } from 'connected-react-router';
-import rootReducer from './root.reducer';
-import rootSaga from './root.saga';
 import setupSagaMiddleware, { SagaMiddlewareOptions } from 'redux-saga';
+import { Saga } from '@redux-saga/types';
 import * as Sentry from '@sentry/browser';
 import { Middleware, StoreEnhancer, Store } from 'redux'
 import { ErrorHandlingMiddleware } from '@core/middlewares';
-import * as storageManager from "./browser.store";
+import * as browserStorage from "./browser.storage";
 import throttle from 'lodash/throttle';
 
-function configureStore(history: History): Store {
-  const initialState = storageManager.load();
+function configureStore(rootReducer: Reducer, rootSaga: Saga): Store {
+  const savedData = browserStorage.load(browserStorage.STORAGE_KEY) ;
+  const initialState = !savedData ? {} : savedData;
 
   const onError: SagaMiddlewareOptions["onError"] = (
     error: Error, { sagaStack }
@@ -37,7 +37,7 @@ function configureStore(history: History): Store {
   }
 
   const store: Store = createStore(
-    rootReducer(history),
+    rootReducer,
     initialState,
     composeEnhancers(enhancers)
   );
@@ -46,9 +46,10 @@ function configureStore(history: History): Store {
 
   store.subscribe(
     throttle(() =>
-      storageManager.save(
+      browserStorage.save(
+        browserStorage.STORAGE_KEY,
         store.getState()
-      ), 1000)
+      ), 1500)
   );
 
   return store
