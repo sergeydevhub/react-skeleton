@@ -6,10 +6,10 @@ import { FormattedMessage } from "react-intl";
 import styles from './styles';
 import messages from './messages';
 
-type Props = WithStyles<typeof styles>
-type State = {};
+export type ComponentProps = WithStyles<typeof styles>
+export type ComponentState = {};
 
-class NotFoundPageComponent extends React.PureComponent<Props, State> {
+class ErrorPageComponent extends React.PureComponent<ComponentProps, ComponentState> {
   render() {
     const { classes } = this.props;
 
@@ -23,4 +23,4 @@ class NotFoundPageComponent extends React.PureComponent<Props, State> {
   }
 }
 
-export default withStyles(styles)(NotFoundPageComponent);
+export default withStyles(styles)(ErrorPageComponent);

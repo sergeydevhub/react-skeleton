@@ -9,7 +9,7 @@ class MainPage extends React.PureComponent<Props, State> {
     return (
       <Paper>
         <Typography variant="h1" align="center">
-          Main content
+          {/* Main content */}
         </Typography>
       </Paper>
     )

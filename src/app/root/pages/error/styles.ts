@@ -5,7 +5,6 @@ const styles = (theme: Theme) => createStyles( ({
     padding: theme.spacing(4)
   },
   content: {
-    paddingTop: 150,
     textAlign: 'center'
   },
 }));

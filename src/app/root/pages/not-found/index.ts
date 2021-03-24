@@ -1,1 +1,1 @@
-export { default } from './not-found-page.component';
+export { default as NotFoundPage } from './not-found-page.component';
