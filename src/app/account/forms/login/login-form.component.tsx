@@ -1,82 +1,85 @@
-import React from "react";
-import { FormikErrors, FormikConfig, ErrorMessage } from "formik";
+import React, { SyntheticEvent } from "react";
+import { FormikErrors, FormikConfig, ErrorMessage, FormikHelpers, FormikState } from "formik";
 import { FormattedMessage } from "react-intl";
-import { InvalidPropertyError as FieldError } from "@core/errors/variations/validator.error";
 import { TextField } from "@core/forms/fields";
-import * as validator from "@core/forms/validation";
 import { Field, Form, Formik, } from "formik";
 import Button from "@material-ui/core/Button"
-import { Props, State } from './login-form.types';
+import { ComponentProps as Props, ComponentState as State, FormValues } from './login-form.types';
 import messages from "./messages";
 import { capitalize } from "lodash";
+import { AbstractHandlerMiddleware } from "@core/middlewares";
+import {
+  PasswordLengthValidator,
+  CapitalsContainsValidator,
+  DigitsContainsValidator,
+  EmailValidator
+} from './validators';
 
-interface FormOpt {
-  email: string;
-  password: string;
-}
-
-const fields: FormOpt = {
-  email: '',
-  password: ''
-};
+type FormProps = FormikConfig<Readonly<FormValues>> & FormikState<FormValues>;
 
 class LoginFormComponent extends React.Component<Props, State> {
-  onSubmit = (values: FormOpt, helpers: any): void => {
-    helpers.setSubmitting(true);
-    const { email, password }: FormOpt = values;
-    const payload = {
+  private _emailValidator: AbstractHandlerMiddleware;
+  private _passwordValidator: AbstractHandlerMiddleware;
+
+
+  constructor(props: Props) {
+    super(props);
+    this.state = { email: '', password: '' };
+
+    this._emailValidator = new EmailValidator();
+
+    this._passwordValidator = new PasswordLengthValidator(16);
+    this._passwordValidator.register(new CapitalsContainsValidator(2));
+    this._passwordValidator.register(new DigitsContainsValidator(3));
+  }
+
+  validate = (values: FormValues): object => {
+    const defaultMessage: string = '';
+
+    const email: string = this._emailValidator.isAllowed(
+      Array.from(values.email)
+    ) ? this._emailValidator.message : defaultMessage;
+
+    const password: string = this._passwordValidator.isAllowed(
+      Array.from(values.password)
+    ) ? this._passwordValidator.message : defaultMessage;
+
+    return {
       email,
       password
-    };
+    }
+  };
+
+  isValid = (errors: FormikErrors<FormValues>): boolean => {
+    return !!Object.values(errors).filter(Boolean).length;
+  };
+
+  onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const field = event.currentTarget.name;
+    const value = event.target.value;
+
+    this.setState({ ...this.state, [field]: value });
+  };
+
+  onSubmit = (values: FormValues, helpers: FormikHelpers<FormValues>): void => {
+    helpers.setSubmitting(true);
+
     const meta = {
       helpers,
       timestamp: Date.now()
     };
 
-    this.props.login.triggered({
-      payload,
-      meta
-    })
+    this.props.login(values, meta);
   };
   
-  render() {
-    const { schema } = validator;
-    const isEmail: validator.Validate<FormOpt> = (
-      values: FormOpt
-    ) => schema.email(values.email) || new FieldError<FormOpt>('invalid', 'email');
-    
-    const isEmailRequired: validator.Validate<FormOpt> = (
-      values: FormOpt
-    ) => schema.required(values.email) || new FieldError<FormOpt>('required', 'email');
-
-    const isPasswordRequired: validator.Validate<FormOpt> = (
-      values: FormOpt
-    ) => schema.required(values.password) || new FieldError<FormOpt>('required', 'password');
-    
-    const isGreaterThan: validator.Validate<FormOpt> = (values: FormOpt) => {
-      const isValid = validator.schema.greater.than;
-      return isValid(values.password, 6) || new FieldError<FormOpt>('greaterThan', 'password')
-    };
-
-    const validate: FormikConfig<FormOpt>['validate'] = (
-      values: FormOpt
-    ): FormikErrors<FormOpt> => {
-      let result: Partial<FormOpt> = {};
-      const pipe = [isGreaterThan, isEmail, isEmailRequired, isPasswordRequired];
-      validator.execute(pipe, values).map(
-        (exception: FieldError<FormOpt>) => {
-          result[exception.property] = exception.message
-        }
-      );
-
-      return result;
-    };
-
+  public render() {
     return (
       <Formik
+        enableReinitialize
+        handleChange={this.onChange}
         onSubmit={this.onSubmit}
-        initialValues={fields}
-        validate={validate}
+        initialValues={this.state}
+        validate={this.validate}
       >
         {(props) => (
             <Form>
@@ -89,7 +92,11 @@ class LoginFormComponent extends React.Component<Props, State> {
                 name="email"
                 component={TextField}
               />
-              <ErrorMessage component="span" name="email" />
+              {
+                props.touched.email && props.errors.email && (
+                  <ErrorMessage component="span" name="email"/>
+                )
+              }
               <Field
                 label={
                   <FormattedMessage { ...messages.password }>
@@ -99,10 +106,14 @@ class LoginFormComponent extends React.Component<Props, State> {
                 name="password"
                 component={TextField}
               />
-              <ErrorMessage component="span" name="password" />
+              {
+                props.touched.password && props.errors.password && (
+                  <ErrorMessage component="span" name="password" />
+                )
+              }
               <Button
                 type="submit"
-                disabled={props.isSubmitting && props.isValidating && !this.props.status.isTriggered}
+                disabled={ props.isSubmitting && props.isValidating && this.isValid(props.errors) }
               >
                 <FormattedMessage { ...messages.send }>
                   { message => capitalize(message as string) }
@@ -115,6 +126,4 @@ class LoginFormComponent extends React.Component<Props, State> {
   }
 }
 
-export {
-  LoginFormComponent
-};
+export default LoginFormComponent;

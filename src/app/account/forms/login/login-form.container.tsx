@@ -1,20 +1,12 @@
-import ReduxTypes from 'ReduxTypes';
 import { connect } from 'react-redux';
-import { actions } from '@core/modules/profile/account';
-import { selectors } from '@core/modules/profile/root';
-import { LoginFormComponent } from './login-form.component';
-
-const mapStateToProps = (state: ReduxTypes.RootState) => {
-  return {
-    status: selectors.getStatus(state)
-  }
-};
+import { actions } from '@modules/profile/root';
+import LoginFormComponent from './login-form.component';
 
 const mapDispatchToProps = {
-  ...actions
+  login: actions.login.triggered
 };
 
-export const connector = connect(mapStateToProps, mapDispatchToProps);
+export const connector = connect(null, mapDispatchToProps);
 
 
 export default connector(LoginFormComponent);

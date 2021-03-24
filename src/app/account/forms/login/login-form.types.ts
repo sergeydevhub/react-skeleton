@@ -1,5 +1,11 @@
 import { ConnectedProps } from "react-redux";
 import { connector } from './login-form.container';
 
-export type Props = & ConnectedProps<typeof connector>;
-export type State = {};
+export type ComponentProps = & ConnectedProps<typeof connector>;
+
+export interface FormValues {
+  email: string;
+  password: string;
+}
+
+export type ComponentState = FormValues & {};
