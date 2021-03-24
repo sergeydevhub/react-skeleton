@@ -1,11 +1,10 @@
-const DEFAULT_LANG = 'en';
+export type TAvailableLangs = 'en' | 'ru'
+export type TAvailableLocales = 'en_US' | 'ru_RU';
 
-const LOCALES: Record<string, string> = {
+export const DEFAULT_LANG: TAvailableLangs = 'en';
+
+export const LOCALES: Record<TAvailableLangs, TAvailableLocales> = {
   en: 'en_US',
   ru: 'ru_RU'
 };
 
-export {
-  DEFAULT_LANG,
-  LOCALES
-}
