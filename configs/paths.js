@@ -13,6 +13,7 @@ dirs.tsProdConfig = resolvePath('./tsconfig.prod.json');
 dirs.core = resolvePath('src/core');
 dirs.theme = resolvePath('src/theme');
 dirs.app = resolvePath('src/app');
+dirs.modules = resolvePath('src/modules');
 dirs.dotEnvDev = resolvePath('./configs/.env.development');
 dirs.dotEnvProd = resolvePath('./configs/.env.production');
 dirs.indexTemplate = resolvePath(`${dirs.src}/index.ejs`);

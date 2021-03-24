@@ -14,6 +14,7 @@ module.exports = {
       '@core': paths.core,
       '@theme': paths.theme,
       '@app': paths.app,
+      '@modules': paths.modules,
     },
     extensions: paths.filesExtensions,
     modules: ['node_modules'],

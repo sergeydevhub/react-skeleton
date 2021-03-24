@@ -8,7 +8,6 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 
 
 module.exports = config => {
-
   return merge(config, {
     mode: process.env.NODE_ENV,
     cache: true,
