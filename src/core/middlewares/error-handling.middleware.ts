@@ -1,30 +1,28 @@
 import * as Sentry from "@sentry/browser";
-import { FailureAction, Action, defaultStatus as status } from '@core/helpers';
+import { FailureAction, RootAction as Action, isFailureTypeGuard } from '@core/helpers/redux/actions';
 import {Dispatch, Middleware, MiddlewareAPI} from 'redux';
-import { RootError } from "@core/errors/variations";
 
 const handleError = (
-  action: FailureAction<RootError>
+  action: FailureAction
 ): void => {
-  Sentry.captureException(action.error);
+  Sentry.captureException(action.payload);
   Sentry.addBreadcrumb({
     category: 'redux',
-    message: action.error.message,
+    message: action.message,
     level: Sentry.Severity.Error,
     data: action.payload
   })
 };
 
 const middleware: Middleware = (store: MiddlewareAPI) => (next: Dispatch<Action>) => (action: Action) => {
-  if(action.error) {
-    handleError(action as FailureAction<RootError>)
+  if(isFailureTypeGuard(action)) {
+    handleError(action)
   }
 
   try {
     return next(action)
   } catch (error) {
-    status.isFailure = !status.isFailure;
-    const failedAction: FailureAction<RootError> = { ...action, error, status };
+    const failedAction = new FailureAction(error.message);
     handleError(failedAction)
   }
 };
