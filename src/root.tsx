@@ -1,5 +1,5 @@
 import React from "react";
-import { Store } from "redux";
+import { Store, Reducer } from "redux";
 import * as Sentry from "@sentry/browser";
 import { ConnectedRouter } from "connected-react-router";
 import {Route, Switch} from "react-router";
@@ -10,16 +10,20 @@ import { theme } from "@theme";
 import LocalizationProvider from "@core/localization";
 import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
 import { Helmet } from "react-helmet";
-import { ErrorsHandlerContainer } from "@core/errors/handlers";
+import { ErrorsHandlerContainer } from "@core/exceptions/handlers";
 import { AuthProtectedRoute } from "@core/routing";
-import { paths } from "@core/configs/router-paths.config";
+import { paths } from "@core/routing/routes";
 import { MainLayout } from "./layouts/main";
 import { AuthLayout } from "./layouts/auth";
 import { Preloader } from "@app/shared/preloaders";
 import { BeforeUnloadPromptComponent as BeforeUnloadPrompt } from "@app/shared/prompts";
-import { default as NotFoundPage } from "@app/root/pages/not-found";
+import { NotFoundPage } from "@app/root/pages/not-found";
+import { ErrorPageComponent } from '@app/root/pages/error';
+import { SecondaryLayout } from "./layouts/secondary";
+import { rootReducer, rootSaga } from '@modules/app/root';
 
-const store: Store = configureStore(history);
+
+const store: Store = configureStore((rootReducer as Reducer), rootSaga);
 
 Sentry.init({ dsn: process.env.SENTRY_DSN });
 
@@ -29,59 +33,70 @@ const Wrapper: React.ExoticComponent<
   ? React.StrictMode
   : React.Fragment;
 
-type Props = {};
-type State = {};
+const Root: React.FC<{}> = () => {
+  return (
+    <Wrapper>
+      <Provider store={ store }>
+        <MuiThemeProvider theme={ theme }>
+          <CssBaseline />
+          <BeforeUnloadPrompt />
+          <Helmet>
+            <meta
+              name="viewport"
+              content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+            />
+          </Helmet>
+          <LocalizationProvider>
+            <ConnectedRouter history={ history }>
+              <Transition enter={ 400 } exit={ 400 }>
+                <ErrorsHandlerContainer>
+                  <Switch>
+                    <AuthProtectedRoute
+                      exact
+                      path={ paths.ROOT }
+                    >
+                      <MainLayout>
+                        <Preloader
+                          variant="page"
+                          Component={ import("@app/root/pages/main") }
+                        />
+                      </MainLayout>
+                    </AuthProtectedRoute>
+                    <AuthProtectedRoute
+                      exact
+                      path={ paths.LOGIN }
+                    >
+                      <AuthLayout>
+                        <Preloader
+                          variant="page"
+                          Component={ import("@app/account/pages/login") }
+                        />
+                      </AuthLayout>
+                    </AuthProtectedRoute>
+                    <Route exact path={paths.ERROR}>
+                      <SecondaryLayout>
+                        <ErrorPageComponent />
+                      </SecondaryLayout>
+                    </Route>
+                    <Route exact path={paths.NOT_FOUND}>
+                      <SecondaryLayout>
+                        <ErrorPageComponent />
+                      </SecondaryLayout>
+                    </Route>
+                    <Route>
+                      <SecondaryLayout>
+                        <NotFoundPage />
+                      </SecondaryLayout>
+                    </Route>
+                  </Switch>
+                </ErrorsHandlerContainer>
+              </Transition>
+            </ConnectedRouter>
+          </LocalizationProvider>
+        </MuiThemeProvider>
+      </Provider>
+    </Wrapper>
+  )
+};
 
-export default class Root extends React.Component<Props, State> {
-  render() {
-    return (
-      <Wrapper>
-        <Provider store={ store }>
-          <MuiThemeProvider theme={ theme }>
-            <CssBaseline />
-            <BeforeUnloadPrompt />
-            <Helmet>
-              <meta
-                name="viewport"
-                content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
-              />
-            </Helmet>
-            <LocalizationProvider>
-              <ConnectedRouter history={ history }>
-                <Transition enter={ 400 } exit={ 400 }>
-                  <ErrorsHandlerContainer>
-                    <Switch>
-                      <AuthProtectedRoute
-                        exact
-                        path={ paths.ROOT }
-                      >
-                        <MainLayout>
-                          <Preloader
-                            variant="page"
-                            Component={ import("@app/root/pages/main") }
-                          />
-                        </MainLayout>
-                      </AuthProtectedRoute>
-                      <AuthProtectedRoute
-                        exact
-                        path={ paths.LOGIN }
-                      >
-                        <AuthLayout>
-                          <Preloader
-                            variant="page"
-                            Component={ import("@app/account/pages/login") }
-                          />
-                        </AuthLayout>
-                      </AuthProtectedRoute>
-                      <Route component={ NotFoundPage } />
-                    </Switch>
-                  </ErrorsHandlerContainer>
-                </Transition>
-              </ConnectedRouter>
-            </LocalizationProvider>
-          </MuiThemeProvider>
-        </Provider>
-      </Wrapper>
-    )
-  }
-}
+export default Root;

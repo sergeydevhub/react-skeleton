@@ -3,6 +3,7 @@ import Root from './root';
 import ReactDOM from 'react-dom';
 import FontFaceObserver from 'fontfaceobserver';
 import { register, unregister } from "./service-worker";
+import 'reflect-metadata';
 
 const fontWeights = [300, 500, 700];
 const asyncRobotoFont: Array<Promise<any>> = fontWeights.map(weight => {
