@@ -10,7 +10,6 @@ const handleError = (
     category: 'redux',
     message: action.message,
     level: Sentry.Severity.Error,
-    data: action.payload
   })
 };
 
