@@ -1,7 +1,7 @@
 import {AbstractHandlerMiddleware} from "@core/middlewares";
 import {isDecimal} from "class-validator";
 
-export class DigitsContainsValidator extends AbstractHandlerMiddleware {
+export class DigitsContainsValidator extends AbstractHandlerMiddleware<Array<string>> {
   public message: string = '';
   private readonly _amount: number;
 

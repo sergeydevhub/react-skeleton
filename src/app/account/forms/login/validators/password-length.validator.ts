@@ -1,6 +1,6 @@
 import {AbstractHandlerMiddleware} from "@core/middlewares";
 
-export class PasswordLengthValidator extends AbstractHandlerMiddleware {
+export class PasswordLengthValidator extends AbstractHandlerMiddleware<Array<string>> {
   public message: string = '';
   private readonly _allowedLength: number;
 

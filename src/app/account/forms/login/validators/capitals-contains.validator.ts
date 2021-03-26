@@ -1,7 +1,7 @@
 import {AbstractHandlerMiddleware} from "@core/middlewares";
 import {isUppercase} from "class-validator";
 
-export class CapitalsContainsValidator extends AbstractHandlerMiddleware {
+export class CapitalsContainsValidator extends AbstractHandlerMiddleware<Array<string>> {
   public message: string = '';
 
   private readonly _amount: number;

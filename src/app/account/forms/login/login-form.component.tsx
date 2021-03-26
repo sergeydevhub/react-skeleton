@@ -18,8 +18,8 @@ import {
 type FormProps = FormikConfig<Readonly<FormValues>> & FormikState<FormValues>;
 
 class LoginFormComponent extends React.Component<Props, State> {
-  private _emailValidator: AbstractHandlerMiddleware;
-  private _passwordValidator: AbstractHandlerMiddleware;
+  private _emailValidator: AbstractHandlerMiddleware<string>;
+  private _passwordValidator: AbstractHandlerMiddleware<Array<string>>;
 
 
   constructor(props: Props) {
@@ -36,11 +36,11 @@ class LoginFormComponent extends React.Component<Props, State> {
   validate = (values: FormValues): object => {
     const defaultMessage: string = '';
 
-    const email: string = this._emailValidator.isAllowed(
-      Array.from(values.email)
-    ) ? this._emailValidator.message : defaultMessage;
+    const email: string = !this._emailValidator.isAllowed(values.email)
+      ? this._emailValidator.message
+      : defaultMessage;
 
-    const password: string = this._passwordValidator.isAllowed(
+    const password: string = !this._passwordValidator.isAllowed(
       Array.from(values.password)
     ) ? this._passwordValidator.message : defaultMessage;
 
