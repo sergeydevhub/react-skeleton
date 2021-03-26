@@ -13,7 +13,6 @@ import { history } from '@core/routing';
 
 type TWorkerRuntimeEnv<T> = (worker: TWorker<T>) => (...args: any[]) => any
 
-//TODO switch to typed-redux-saga
 type TWorker<T> = (
   httpClient: HttpClient,
   action: TriggeredAction<T>,
