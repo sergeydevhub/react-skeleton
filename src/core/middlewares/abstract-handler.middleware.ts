@@ -1,18 +1,18 @@
-export abstract class AbstractHandlerMiddleware {
-  protected next!: AbstractHandlerMiddleware;
+export abstract class AbstractHandlerMiddleware<T> {
+  protected next!: AbstractHandlerMiddleware<T>;
   public abstract message: string;
 
-  public register(next: AbstractHandlerMiddleware) {
+  public register(next: AbstractHandlerMiddleware<T>) {
     this.next = next;
     return next;
   }
 
-  public abstract isAllowed(...args: Array<any>): boolean;
+  public abstract isAllowed(args: T): boolean;
 
-  protected checkNext<T extends Array<any>>(...args: T): boolean {
+  protected checkNext(args: T): boolean {
     this.message = '';
 
-    if(this.next === null) {
+    if(!this.next) {
       return true
     }
 
