@@ -5,7 +5,7 @@ import setupSagaMiddleware, { SagaMiddlewareOptions } from 'redux-saga';
 import { Saga } from '@redux-saga/types';
 import * as Sentry from '@sentry/browser';
 import { Middleware, StoreEnhancer, Store } from 'redux'
-import { ErrorHandlingMiddleware } from '@core/middlewares';
+import { ErrorProcessingMiddleware } from '@core/middlewares';
 import * as browserStorage from "./browser.storage";
 import throttle from 'lodash/throttle';
 
@@ -22,13 +22,13 @@ function configureStore(rootReducer: Reducer, rootSaga: Saga): Store {
   };
 
   const sagaMiddleware = setupSagaMiddleware(sagaOptions);
-  const middlewares: Array<Middleware> = [
+  const middleware: Array<Middleware> = [
     sagaMiddleware,
     routerMiddleware(history),
-    ErrorHandlingMiddleware
+    ErrorProcessingMiddleware
   ];
 
-  const enhancers: StoreEnhancer = applyMiddleware(...middlewares);
+  const enhancers: StoreEnhancer = applyMiddleware(...middleware);
 
   if (module.hot) {
     module.hot.accept();
