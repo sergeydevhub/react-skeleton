@@ -19,5 +19,5 @@ export const reducer = localizationModule.reducer(
   [switchLang.type]: (
     state: TState = {...initialState},
     action: ReturnType<typeof switchLang>
-  ) => repository.update(action.payload)
+  ) => repository.update({ language: action.payload, locale: LOCALES[action.payload] })
 }), { ...initialState });
