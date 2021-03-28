@@ -4,7 +4,8 @@ import { StateHelper } from "./state.helper";
 import { IEntity } from "./types";
 
 export class CollectionRepository<
-  State extends Record<IEntity['id'], IEntity> = Record<IEntity['id'], IEntity>,
+  State extends Record<IEntity['id'],
+  IEntity> = Record<IEntity['id'], IEntity>,
   P extends State[keyof State] = State[keyof State]
 > extends AbstractRepository<State, P> {
   public readonly defaultStrategy: IStrategy<State> = new CollectionStrategy<State>();
@@ -29,9 +30,5 @@ export class CollectionRepository<
   public delete(id: keyof State): State {
     this._context.remove(id);
     return this._context.getState();
-  }
-
-  public clearAll(): object {
-    return {};
   }
 }

@@ -11,6 +11,5 @@ export abstract class AbstractRepository<State extends object, P extends any = a
   public abstract create(payload: P, ...args: Array<any>): State;
   public abstract update(payload: P, key?: keyof State | keyof P | number, ...args: Array<any>): State;
   public abstract delete(id: keyof State | number): State | object;
-  public abstract clearAll(): object;
 }
 

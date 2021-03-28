@@ -2,9 +2,7 @@ import {AbstractRepository} from "./abstract.repository";
 import {CollectionStrategy, DefaultStrategy, IStrategy} from "./transform.strategy";
 import {StateHelper} from "@core/helpers/redux/state/state.helper";
 
-export class ObjectRepository<
-  State extends object,
-> extends AbstractRepository<State, any> {
+export class ObjectRepository<State extends object> extends AbstractRepository<State, any> {
   public readonly defaultStrategy: IStrategy<State> = new DefaultStrategy();
 
   constructor(
@@ -30,9 +28,5 @@ export class ObjectRepository<
   public delete(key: keyof State): State | object {
     this._context.remove(key);
     return this._context.getState();
-  }
-
-  public clearAll(): object {
-    return {};
   }
 }
