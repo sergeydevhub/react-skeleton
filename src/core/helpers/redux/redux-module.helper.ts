@@ -43,7 +43,8 @@ type TCustomActionCreators<T, E, S> = {
 }
 
 type TAsyncActionCreators = <Triggered, Failure extends RootException, Successful>(
-  actionNamingPartials: [ Method, ...Array<string> ],
+  // actionNamingPartials: [ Method, ...Array<string> ],
+  actionNamingPartials: [ ...Array<string> ],
   customActionCreators?: Partial<TCustomActionCreators<Triggered, Failure, Successful>>
 ) => TConditionalActionCreators<Triggered, Failure, Successful>;
 
@@ -53,7 +54,6 @@ export type TInferActionsNode<T> = T extends Record<
 
 
 type TSyncActionCreator = <Payload>(
-  // actionNamingPartials: [ Method, ...Array<string> ],
   actionNamingPartials: [ ...Array<string> ],
   customActionCreators?: TActionCreatorProvider<BaseAction<Payload>>
 ) => TActionCreator<RootAction<Payload>>;
