@@ -17,11 +17,17 @@ export class ObjectRepository<State extends object> extends AbstractRepository<S
     return this._context.getState()
   }
 
-  public update(payload: Partial<State[keyof State]>, key?: keyof State): State {
-    const collectionStrategy = new CollectionStrategy<State>();
-    this._context.setStrategy(collectionStrategy);
-    !key ? this._context.update(payload) : this._context.update(payload, key);
-    this._context.setStrategy(this.defaultStrategy);
+  public update(payload: Partial<State>): State
+  public update(payload: Partial<State[keyof State]> | Partial<State>, key?: keyof State): State {
+    if(!key) {
+      this._context.update(payload);
+    } else {
+      const collectionStrategy = new CollectionStrategy<State>();
+      this._context.setStrategy(collectionStrategy);
+      this._context.update(payload, key);
+      this._context.setStrategy(this.defaultStrategy);
+    }
+
     return this._context.getState();
   }
 

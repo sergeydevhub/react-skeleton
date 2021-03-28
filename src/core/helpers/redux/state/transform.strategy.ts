@@ -19,7 +19,7 @@ export class CollectionStrategy<
 }
 
 export class DefaultStrategy<State extends object> implements IStrategy<State> {
-  public transform(payload: State, key?: string | number | unknown): State {
+  public transform(payload: State): State {
     const converter = new ClassConverter<State, State>();
     return converter.fromClass(payload);
   }
