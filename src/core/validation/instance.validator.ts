@@ -11,7 +11,7 @@ import { IValidator } from "./types";
 
 export class InstanceValidator<T extends object> implements IValidator<T> {
   constructor(
-    protected readonly origin: ClassConstructor<T>
+    protected readonly Origin: ClassConstructor<T>
   ) {}
 
   public static isObject(data: unknown): boolean {
@@ -19,8 +19,8 @@ export class InstanceValidator<T extends object> implements IValidator<T> {
   }
 
   public isTypeOf<Parent>(child: object): child is T {
-    return child instanceof this.origin
-      || child.constructor.name === this.origin.name;
+    return child instanceof this.Origin
+      || child.constructor.name === this.Origin.name;
   }
 
   public validate<E extends ValidationError>(
@@ -29,9 +29,12 @@ export class InstanceValidator<T extends object> implements IValidator<T> {
       whitelist: true,
       forbidNonWhitelisted: true
     }): Array<ValidationError | TypeError> {
-    const converter = new ClassConverter<T, Object>();
-    const instance = converter.toClass(data, this.origin);
-    const errors = validateSync(instance);
+    if(!(data instanceof this.Origin)) {
+      const converter = new ClassConverter<T, Object>();
+      data = converter.toClass(data, this.Origin);
+    }
+
+    const errors = validateSync(data);
 
     if(errors.length) {
       return errors as Array<ValidationError>
