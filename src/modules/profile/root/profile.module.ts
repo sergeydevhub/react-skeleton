@@ -19,7 +19,7 @@ const profileModule = new ReduxModuleHelper<TState>('profile', ObjectRepository)
 const getProfile = profileModule.async<
   undefined,
   HTTPResponseException,
-  ProfileEntity | {}
+  ProfileEntity | TState
 >(['get'], {
   successful: (actionCreator) => (response: unknown) => {
     const validator = new InstanceValidator(ProfileRecord);
@@ -43,7 +43,14 @@ export const reducer: Reducer<TState, BaseAction> = profileModule.reducer(
   (repository: ObjectRepository<TState>) => ({
     [getProfile.successful.type]: (
       state: TState = initialState, action: ReturnType<typeof getProfile.successful>
-    ) => repository.create(action.payload)
+    ) => {
+      const validator = new InstanceValidator(ProfileEntity);
+      if(validator.isValid(action.payload)) {
+        return repository.create(action.payload);
+      }
+
+      return initialState;
+    }
   }), initialState
 );
 
