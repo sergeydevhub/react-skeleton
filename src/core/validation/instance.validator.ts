@@ -29,7 +29,7 @@ export class InstanceValidator<T extends object> implements IValidator<T> {
       whitelist: true,
       forbidNonWhitelisted: true
     }): Array<ValidationError | TypeError> {
-    if(!(data instanceof this.Origin)) {
+    if(!(this.isTypeOf(data))) {
       const converter = new ClassConverter<T, Object>();
       data = converter.toClass(data, this.Origin);
     }
@@ -38,12 +38,6 @@ export class InstanceValidator<T extends object> implements IValidator<T> {
 
     if(errors.length) {
       return errors as Array<ValidationError>
-    }
-
-    if(!this.isTypeOf(data)) {
-      return [
-        new TypeError(`${ data.constructor.name } has incorrect type.`)
-      ];
     }
 
     return errors;
