@@ -3,7 +3,7 @@ import { FormikHelpers } from 'formik';
 import * as ReduxTypes from 'ReduxTypes';
 import { ObjectRepository } from "@core/helpers/redux/state";
 import { ReduxModuleHelper } from "@core/helpers/redux";
-import {IProfile, ProfileEntity, ProfileRecord, TokenRecord} from "@modules/profile/root/data";
+import { IProfile, ProfileEntity, ProfileRecord, TokenRecord} from "@modules/profile/root/data";
 import { HTTPResponseException, AuthException } from '@core/exceptions/variations';
 import { InstanceValidator } from "@core/validation";
 import { ClassConverter } from "@core/converters";
