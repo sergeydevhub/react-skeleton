@@ -18,7 +18,7 @@ export class InstanceValidator<T extends object> implements IValidator<T> {
     return isObject(data);
   }
 
-  public isTypeOf<Parent>(child: object): child is T {
+  public isTypeOf(child: object): child is T {
     return child instanceof this.Origin
       || child.constructor.name === this.Origin.name;
   }
