@@ -32,7 +32,7 @@ const getProfile = profileModule.async<
       return actionCreator(result);
     }
 
-    return actionCreator({})
+    return actionCreator(initialState)
   }
 });
 
