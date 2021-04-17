@@ -37,7 +37,7 @@ export function * logoutWatcher() {
       });
 
       if(successful) {
-        logoutProcessing(successful);
+        yield fork(logoutProcessing, successful);
       }
     }
   } catch {}
