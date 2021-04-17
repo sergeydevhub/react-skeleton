@@ -1,2 +1,2 @@
-export * from './object.converter';
+export * from './instance.converter';
 export * from './key.converter';

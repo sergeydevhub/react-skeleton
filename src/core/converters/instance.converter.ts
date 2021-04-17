@@ -6,21 +6,16 @@ import {
 import { ClassConstructor } from "Utils";
 import { AbstractConverter } from "./types";
 
-export class ClassConverter<Input, Output> extends AbstractConverter<Input, Output> {
+type Instance = object;
+
+export class InstanceConverter<Input extends Instance, Output extends Instance>
+  extends AbstractConverter<Input, Output> {
   constructor() {
     super();
   }
 
-  public toClass<O extends ClassConstructor<Output>>(from: object, to: O): Output {
-    return this.to((from as any), to);
-  }
-
-  public fromClass(from: Input): Output {
-    return this.from(from);
-  }
-
   public to(
-    from: Input,
+    from: object,
     to: ClassConstructor<Output>,
     options?: ClassTransformOptions
   ): Output {
@@ -28,9 +23,9 @@ export class ClassConverter<Input, Output> extends AbstractConverter<Input, Outp
   }
 
   public from(
-    input: Input,
+    input: object,
     options?: ClassTransformOptions
   ): Output {
-    return classToPlain<Input>(input) as Output;
+    return classToPlain(input) as Output;
   }
 }
