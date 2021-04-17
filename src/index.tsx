@@ -1,24 +1,26 @@
 import React from 'react';
 import Root from './root';
 import ReactDOM from 'react-dom';
-import FontFaceObserver from 'fontfaceobserver';
+import FontFaceObserver, { FontVariant } from 'fontfaceobserver';
 import { register, unregister } from "./service-worker";
 import 'reflect-metadata';
 
-const fontWeights = [300, 500, 700];
-const asyncRobotoFont: Array<Promise<any>> = fontWeights.map(weight => {
-  const font = new FontFaceObserver('Roboto', { weight });
+const fontWeights = [ 300, 500, 700 ];
+
+const asyncRobotoFont: Array<Promise<void>> = fontWeights.map(weight => {
+  const variant: FontVariant = { weight };
+  const font = new FontFaceObserver('Roboto', variant);
   return font.load();
 });
 
-const materialIconsFont = new FontFaceObserver('Material Icons').load();
+const materialIconsFont: Promise<void> = new FontFaceObserver('Material Icons').load();
 
 Promise.all([...asyncRobotoFont, materialIconsFont])
-  .then(() => { document.body.classList.add('fontLoaded') })
+  .then(() => document.body.classList.add('fontLoaded'))
   .catch(err => console.log(err));
 
 
-const mountNode = document.getElementById('root') as HTMLElement;
+const mountNode: HTMLElement | null = document.getElementById('root');
 
 ReactDOM.render(
   <Root />,
