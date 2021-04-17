@@ -1,6 +1,6 @@
 import { TOnFulfilled, TOnReject } from "@core/transport/types";
-import {AxiosRequestConfig} from "axios";
-import {THeaders} from "@core/configs/headers.config";
+import { AxiosRequestConfig } from "axios";
+import { THeaders } from "./types";
 import deepmerge from "deepmerge";
 import { HTTPResponseException, AuthException } from "@core/exceptions/variations";
 import { HttpStatusCodes } from "@core/configs/http-statuses.config";
@@ -25,7 +25,6 @@ export const prodEnvHeadersPrepend: TOnFulfilled<
 > = (config): AxiosRequestConfig => {
   const headers: Partial<THeaders> = (
     process.env.NODE_ENV?.includes('prod') && {
-      'X-XSS-Protection': '1; mode=block',
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'SAMEORIGIN',
       'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',

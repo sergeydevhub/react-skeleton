@@ -7,8 +7,8 @@ import { IAxiosRequestConfig, TParams, IParamsRequiredConfig } from "./types";
 
 type InterceptorTuple<T> = [TOnFulfilled<T>, TOnReject];
 
-export abstract class AbstractHttpTransport {
-  public readonly baseURL: string = AbstractHttpTransport.prepareBaseURL();
+export abstract class AbstractHttpClient {
+  public readonly baseURL: string = AbstractHttpClient.prepareBaseURL();
 
   protected readonly _requestInterceptors: Set<InterceptorTuple<AxiosRequestConfig>>;
   protected readonly _responseInterceptors: Set<InterceptorTuple<AxiosResponse>>;
@@ -20,15 +20,11 @@ export abstract class AbstractHttpTransport {
   protected constructor(
     _config: IAxiosRequestConfig = {}
   ) {
-    this.mergeConfigs(_config);
+    this._mergeConfigs(_config);
     this._axiosRef = axios.create(this._config);
 
     this._requestInterceptors = new Set();
     this._responseInterceptors = new Set();
-  }
-
-  protected mergeConfigs(config: IAxiosRequestConfig): IAxiosRequestConfig {
-    return deepmerge(this._config, config);
   }
 
   public prepareRequestURL(url: string): string {
@@ -40,14 +36,18 @@ export abstract class AbstractHttpTransport {
     return new URL(url).origin
   }
 
-  protected request<Data = any, Params extends TParams = TParams>(
+  protected _mergeConfigs(config: IAxiosRequestConfig): IAxiosRequestConfig {
+    return deepmerge(this._config, config);
+  }
+
+  protected _request<Data = any, Params extends TParams = TParams>(
     config: IAxiosRequestConfig<Data, Params>
   ): Promise<AxiosResponse<unknown>> {
-    const mergedConfig = this.mergeConfigs(config);
+    const mergedConfig = this._mergeConfigs(config);
     return this._axiosRef.request(mergedConfig)
   }
 
-  protected registerInterceptors(): void {
+  protected _registerInterceptors(): void {
     this._requestInterceptors.forEach((
       [onSuccess, onError]: InterceptorTuple<AxiosRequestConfig>
     ) => this._axiosRef.interceptors.request.use(onSuccess, onError));
@@ -67,3 +67,4 @@ export abstract class AbstractHttpTransport {
 
   protected abstract put<DTO extends object, P extends TParams>(url: string, data?: DTO, config?: IParamsRequiredConfig<P>): Promise<AxiosResponse<unknown>>;
 }
+

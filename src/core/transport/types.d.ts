@@ -2,6 +2,17 @@ import {AxiosRequestConfig} from "axios";
 import { TriggeredAction } from "@core/helpers/redux/actions";
 import { FormikHelpers } from "formik";
 
+export type THeaders = Readonly<{
+  "Authorization": string;
+  "X-Request-Timestamp": number;
+  "X-Content-Type-Options": string;
+  "X-Frame-Options": string;
+  "Strict-Transport-Security": string;
+  "Content-Security-Policy": string;
+  "Referrer-Policy": string;
+  "Permissions-Policy": string;
+}>;
+
 export type TResources = 'profile' | 'users' | 'auth';
 
 export type TEndpoint = (action: TriggeredAction, resource?: TResources) => string

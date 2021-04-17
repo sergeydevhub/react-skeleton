@@ -1,4 +1,4 @@
-import { AbstractHttpTransport } from "./abstract-http.transport";
+import { AbstractHttpClient } from "./abstract-http.client";
 import { AxiosResponse } from "axios";
 import {
   processKey,
@@ -18,8 +18,8 @@ import {
   IParamsRequiredConfig
 } from "./types";
 
-export class HttpClient extends AbstractHttpTransport {
-  protected static _instance: HttpClient | null;
+export class HttpClient extends AbstractHttpClient {
+  protected static _instance: HttpClient | null = null;
 
   protected constructor(
     config: IAxiosRequestConfig
@@ -36,7 +36,7 @@ export class HttpClient extends AbstractHttpTransport {
       .add([dataUnpackResponseInterceptor, onResponseError])
       .add([processKey, onResponseError]);
 
-    this.registerInterceptors();
+    this._registerInterceptors();
   }
 
   public static getInstance(
@@ -61,7 +61,6 @@ export class HttpClient extends AbstractHttpTransport {
     return this._axiosRef.get<unknown>(requestURL, config);
   }
 
-
   public post<DTO extends object, P extends TParams>(
     url: string,
     data?: DTO,
@@ -70,7 +69,6 @@ export class HttpClient extends AbstractHttpTransport {
     const requestURL = this.prepareRequestURL(url);
     return this._axiosRef.post<unknown>(requestURL, data)
   }
-
 
   public put<DTO extends object, P extends TParams>(
     url: string,
