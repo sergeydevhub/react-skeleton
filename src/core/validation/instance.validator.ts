@@ -1,4 +1,4 @@
-import { ClassConverter } from "@core/converters";
+import { InstanceConverter } from "@core/converters";
 import { RootException } from "@core/exceptions/variations";
 import { ClassConstructor } from 'Utils';
 import {
@@ -11,16 +11,16 @@ import { IValidator } from "./types";
 
 export class InstanceValidator<T extends object> implements IValidator<T> {
   constructor(
-    protected readonly Origin: ClassConstructor<T>
+    private readonly _Origin: ClassConstructor<T>
   ) {}
 
   public static isObject(data: unknown): boolean {
     return isObject(data);
   }
 
-  public isTypeOf(child: object): child is T {
-    return child instanceof this.Origin
-      || child.constructor.name === this.Origin.name;
+  public isInherited(child: object): child is T {
+    return child instanceof this._Origin
+      || child.constructor.name === this._Origin.name;
   }
 
   public validate<E extends ValidationError>(
@@ -29,9 +29,9 @@ export class InstanceValidator<T extends object> implements IValidator<T> {
       whitelist: true,
       forbidNonWhitelisted: true
     }): Array<ValidationError | TypeError> {
-    if(!(this.isTypeOf(data))) {
-      const converter = new ClassConverter<T, Object>();
-      data = converter.toClass(data, this.Origin);
+    if(!(this.isInherited(data))) {
+      const converter = new InstanceConverter<T, Object>();
+      data = converter.to(data, this._Origin);
     }
 
     const errors = validateSync(data);
