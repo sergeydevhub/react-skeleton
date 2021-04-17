@@ -41,7 +41,7 @@ class ToastView extends React.Component<Props, State> {
     }
   }
 
-  private handleClose(event: SyntheticEvent): void {
+  private __handleClose(event: SyntheticEvent): void {
     event.preventDefault();
 
     this.setState({
@@ -79,7 +79,7 @@ class ToastView extends React.Component<Props, State> {
             </span>
           }
           action={[
-            <IconButton key="close" aria-label="close" color="inherit" onClick={ this.handleClose }>
+            <IconButton key="close" aria-label="close" color="inherit" onClick={ this._handleClose }>
               <CloseIcon className={ classes.icon } />
             </IconButton>,
           ]}
