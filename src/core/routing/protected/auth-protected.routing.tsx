@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RouteProps } from "react-router";
 import ProtectedRoute from './protected.routing';
-import { IProfile, selectors } from '@modules/profile/root';
+import { selectors, IProfile } from '@modules/profile/root/data';
 import * as ReduxTypes from "ReduxTypes";
 
 const mapStateToProps = (state: ReduxTypes.RootState) => ({
