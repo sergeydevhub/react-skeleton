@@ -20,7 +20,8 @@ export class RootException extends Error {
 
   constructor(
     message: string,
-    statusCode?: HttpStatusCodes | WSStatusCodes | undefined
+    statusCode?: HttpStatusCodes | WSStatusCodes | undefined,
+    stack?: string
   ) {
 
     if(!message.length) {
@@ -34,6 +35,8 @@ export class RootException extends Error {
     if(Boolean(statusCode)) {
       this._statusCode = statusCode;
     }
+
+    this.stack = stack;
 
     Object.setPrototypeOf(this, RootException);
     stackTraceHandling(this)
