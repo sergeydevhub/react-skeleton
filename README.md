@@ -1,7 +1,7 @@
 ## Features
 - Static typed React skeleton based on TypeScript
-- Webpack flexible configs composition for the dev / prod env
-- Runtime types checking
+- Webpack flexible configs composition for dev & prod environments
+- Runtime type checking
 - Request & response sandbox for safe processing
 - Redux-saga service creator with closed context
 - Enhanced Redux module helper designed to reduce verbose & complexity  
