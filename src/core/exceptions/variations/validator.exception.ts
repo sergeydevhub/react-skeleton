@@ -1,10 +1,10 @@
 import { RootException } from "./root.exception";
 import { ValidatorTranslation } from '@core/localization/locales';
 
-export class InvalidPropertyException<Property> extends RootException {
+export class InvalidPropertyException<Verifications> extends RootException {
   constructor(
     message: keyof ValidatorTranslation,
-    public property: Partial<keyof Property>
+    public readonly verification: Partial<Verifications>
   ) {
     super(message);
     this.message = `validator.${message}`;
