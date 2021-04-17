@@ -1,28 +1,28 @@
 import {ActionCreator, Reducer} from 'redux';
 import { ReduxModuleHelper } from "@core/helpers/redux";
-import { ObjectRepository } from "@core/helpers/redux/state";
+import { ObjectRepositoryHelper } from "@core/helpers/redux/state";
 import {BaseAction} from "@core/helpers/redux/actions";
 import { TTheme, TThemeStatusConditions } from "./data";
 
-export type State = TTheme;
+export type TState = TTheme;
 
 const status: TThemeStatusConditions = {
   isActive: false
 };
 
-const initialState: State = {
+const initialState: TState = {
   dark: { status },
   light: { status }
 };
 
-const themeModule = new ReduxModuleHelper<State>('theme', ObjectRepository);
+const themeModule = new ReduxModuleHelper<TState>('theme', ObjectRepositoryHelper);
 
 const switchTheme = themeModule.sync<keyof TTheme>(['switch']);
 
-export const rootReducer: Reducer<State, BaseAction> = themeModule.reducer(
-  (repository: ObjectRepository<State>) => ({
+export const rootReducer: Reducer<TState, BaseAction> = themeModule.reducer(
+  (repository: ObjectRepositoryHelper<TState>) => ({
   [switchTheme.type]: (
-    state: State = initialState, action: ReturnType<typeof switchTheme>
+    state: TState = initialState, action: ReturnType<typeof switchTheme>
   ) => repository.update({ status: { isActive: true }}, action.payload)
 }), initialState);
 

@@ -1,6 +1,6 @@
 import {ActionCreator, Reducer} from 'redux';
 import { ReduxModuleHelper } from "@core/helpers/redux";
-import { ObjectRepository } from "@core/helpers/redux/state";
+import { ObjectRepositoryHelper } from "@core/helpers/redux/state";
 import { Notifications, Notification } from './data';
 import {BaseAction} from "@core/helpers/redux/actions";
 
@@ -25,13 +25,13 @@ interface NotificationPayload {
   message: string
 }
 
-const notificationsModule = new ReduxModuleHelper<State>('notifications', ObjectRepository);
+const notificationsModule = new ReduxModuleHelper<State>('notifications', ObjectRepositoryHelper);
 
 const show = notificationsModule.sync<NotificationPayload>(['show']);
 const hide = notificationsModule.sync<keyof Notifications>(['hide']);
 
 export const rootReducer: Reducer<State, BaseAction> = notificationsModule.reducer(
-  (repository: ObjectRepository<State>) => ({
+  (repository: ObjectRepositoryHelper<State>) => ({
   [show.type]: (
     state: State = initialState,
     action: ReturnType<typeof show>
