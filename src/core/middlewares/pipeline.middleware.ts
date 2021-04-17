@@ -9,10 +9,10 @@ interface IPipelineMiddleware<I, O> {
 
 export class PipelineMiddleware<Input extends any, Output extends any>
   implements IPipelineMiddleware<Input, Output> {
-  protected handlers: Array<IHandler<Input, Output>> = [];
+  protected _handlers: Array<IHandler<Input, Output>> = [];
 
   constructor(handler: IHandler<Input, Output>) {
-    this.handlers.push(handler);
+    this._handlers.push(handler);
   }
 
   public pipe(next: IHandler<Input, Output>): PipelineMiddleware<Input, Output> {
@@ -20,6 +20,6 @@ export class PipelineMiddleware<Input extends any, Output extends any>
   }
 
   public execute(input: Input): Output {
-    return this.handlers.reduce((val, handler) => handler.handle(val), (input as any)) as Output;
+    return this._handlers.reduce((val, handler) => handler.handle(val), (input as any)) as Output;
   }
 }
