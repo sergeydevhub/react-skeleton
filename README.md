@@ -1,28 +1,31 @@
 ## Features
-- Strict typed React skeleton based on TypeScript
-- Webpack flexible configs composition
-- Redux-saga util for req/res flow
-- Enhanced Redux module helpers designed to reduce verbose & complexity  
-- Sentry errors tracking 
-- Dark/Light themes
+- Static typed React skeleton based on TypeScript
+- Webpack flexible configs composition for the dev / prod env
+- Runtime types checking
+- Request & response sandbox for safe processing
+- Redux-saga service creator with closed context
+- Enhanced Redux module helper designed to reduce verbose & complexity  
+- Suitable exceptions variations with messages pattern related to corresponded translation
+- Abstract handlers middleware and validation pipeline  
+- Dark/Light themes support
 - Lazy loading components
 - Protected routes
-- Components preloaders  
+- Data formatting
+- Components pre-loaders  
 - Routes animated transition
-- React errors handling container
-- Form validation mechanism & validators schema
-- User warnings about page close & form incomplete
-- Helmet for doc head management 
+- React components errors handling container
+- Flexible form validation
+- User's warning for page closing & form incomplete 
+- Helmet for doc head management
+- Users errors logging and tracking
+- Http client & an interceptors chain
 - User toast notifications
-- Customized Material UI
-- Service worker & redux store simple offline mode 
-- Redux Middleware errors capturing
-- The Main & Auth layouts
+- Customized Material UI components
+- Service worker simple offline mode 
+- Main and secondary kinds of layouts
 - Typed localization
-- Not found page  
+- Redux middleware errors capturing
+- Auxiliary service pages  
 - Authentication page
-- Toggle UI condition HOC
-- SocketIO transport layer bounded to Redux-Saga 
-- The list of typed Exceptions/Errors, with messages pattern related to corresponded translation
-- Redux custom types
-- Data formatting 
+- Toggle UI conditions HOC
+- Redux custom types 
