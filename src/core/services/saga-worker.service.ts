@@ -5,7 +5,7 @@ import { call, put, cancelled, CallEffect, cancel } from 'redux-saga/effects';
 import { ActionException } from "@core/exceptions/variations";
 import { actions as notificationActions } from '@modules/ui/notifications';
 import * as Sentry from '@sentry/browser';
-import {AbstractHttpTransport, HttpClient} from "@core/transport";
+import { AbstractHttpClient, HttpClient } from "@core/transport";
 import { HTTPResponseException, CommonException, RootException } from '@core/exceptions/variations';
 import { TriggeredAction } from "@core/helpers/redux/actions";
 import { paths } from '@core/routing/routes';
@@ -27,7 +27,7 @@ export function sagaWorkerService<T, E extends RootException, S>(
       ...args: Array<any>
     ): SagaIterator {
       try {
-        const httpClient: AbstractHttpTransport = HttpClient.getInstance();
+        const httpClient: AbstractHttpClient = HttpClient.getInstance();
         const result = yield (call as any)(worker, httpClient, action, ...args);
         yield put(actionCreators.successful(result));
 
@@ -71,8 +71,6 @@ export function sagaWorkerService<T, E extends RootException, S>(
           const error = new ActionException(actionCreators.failure.type);
           yield put(actionCreators.failure(error));
           yield put(notificationActions.show({ variant: 'error', message: error.message }));
-
-          history.push(paths.ERROR)
         }
       }
     }
