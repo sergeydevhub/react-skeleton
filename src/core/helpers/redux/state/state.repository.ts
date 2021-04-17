@@ -2,7 +2,7 @@ import {produce} from "immer";
 import deepmerge from 'deepmerge';
 import { IStrategy } from "./transform.strategy";
 
-export class StateHelper<State extends object> {
+export class StateRepository<State extends object> {
   constructor(
     protected _state: State,
     protected _strategy: IStrategy<State>

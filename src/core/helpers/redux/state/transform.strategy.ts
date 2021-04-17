@@ -1,5 +1,5 @@
 import { ExtractValue } from "Utils";
-import { ClassConverter } from "@core/converters";
+import { InstanceConverter } from "@core/converters";
 import { Reducer } from "redux";
 
 export interface IStrategy<State> {
@@ -7,12 +7,10 @@ export interface IStrategy<State> {
 }
 
 //TODO split into separate files
-export class CollectionStrategy<
-  State extends Record<string, ReturnType<Reducer>>
-> implements IStrategy<State> {
+export class CollectionStrategy<State extends Record<string, ReturnType<Reducer>>> implements IStrategy<State> {
   public transform<P extends ExtractValue<State>>(payload: P, key: keyof ExtractValue<State> = payload.id): State {
-    const converter = new ClassConverter<ExtractValue<State>, ExtractValue<State>>();
-    const converted = converter.fromClass(payload);
+    const converter = new InstanceConverter<ExtractValue<State>, ExtractValue<State>>();
+    const converted = converter.from(payload);
     const node = { [key]: converted } as State;
     return node;
   }
@@ -20,8 +18,8 @@ export class CollectionStrategy<
 
 export class DefaultStrategy<State extends object> implements IStrategy<State> {
   public transform(payload: State): State {
-    const converter = new ClassConverter<State, State>();
-    return converter.fromClass(payload);
+    const converter = new InstanceConverter<State, State>();
+    return converter.from(payload);
   }
 }
 

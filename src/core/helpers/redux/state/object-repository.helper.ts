@@ -2,7 +2,9 @@ import {AbstractRepository} from "./abstract.repository";
 import {CollectionStrategy, DefaultStrategy, IStrategy} from "./transform.strategy";
 import {StateRepository} from "./state.repository";
 
-export class ObjectRepositoryManager<State extends object> extends AbstractRepository<State, any> {
+
+export class ObjectRepositoryHelper<State extends { [key in string]: any }>
+  extends AbstractRepository<State, Partial<State>> {
   public readonly defaultStrategy: IStrategy<State> = new DefaultStrategy();
 
   constructor(
@@ -12,12 +14,13 @@ export class ObjectRepositoryManager<State extends object> extends AbstractRepos
     this._context.setStrategy(this.defaultStrategy);
   }
 
-  public create(payload: State): Readonly<State> {
+  public create(payload: State): State {
     this._context.save(payload);
     return this._context.getState()
   }
 
   public update(payload: Partial<State>): State
+  public update(payload: Partial<State[keyof State]> | Partial<State>, key: keyof State): State
   public update(payload: Partial<State[keyof State]> | Partial<State>, key?: keyof State): State {
     if(!key) {
       this._context.update(payload);
@@ -31,7 +34,8 @@ export class ObjectRepositoryManager<State extends object> extends AbstractRepos
     return this._context.getState();
   }
 
-  public delete(key: keyof State): State | object {
+
+  public delete(key: keyof State): State {
     this._context.remove(key);
     return this._context.getState();
   }

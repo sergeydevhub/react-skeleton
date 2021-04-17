@@ -2,7 +2,7 @@ import { StateRepository } from "./state.repository";
 import { IStrategy, ArrayStrategy } from "./transform.strategy";
 import { AbstractRepository } from "./abstract.repository";
 
-export class ArrayRepositoryManager<
+export class ArrayRepositoryHelper<
   State extends Array<any>,
   Payload = State[keyof State]
 > extends AbstractRepository<State> {

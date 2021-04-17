@@ -7,7 +7,9 @@ export type TBaseActionCreator<Action extends BaseAction> = (payload: Action['pa
 export type TCustomActionCreator<Action extends RootAction> = (...args: Array<any>) => Action;
 
 export type TActionCreator<Action extends RootAction> = (
-  TCustomActionCreator<Action> | TBaseActionCreator<Action extends BaseAction ? Action : BaseAction>
+  TCustomActionCreator<Action> | TBaseActionCreator<
+    Action extends BaseAction ? Action : BaseAction
+  >
 ) & ReduxAction<string>;
 
 export interface IActionCreatorHelper {
@@ -15,26 +17,27 @@ export interface IActionCreatorHelper {
   create: TBaseActionCreator<BaseAction>;
 }
 
-export abstract class AbstractActionCreatorHelper<Action extends BaseAction>
-  implements IActionCreatorHelper {
+export abstract class AbstractActionCreatorHelper<
+    Action extends BaseAction
+  > implements IActionCreatorHelper {
 
   public readonly delimiter: string;
   public readonly type: Action['type'];
 
-  protected readonly condition?: string;
+  protected readonly _condition?: string;
 
   public constructor(
     actionTypePartials: TActionNamingPartials,
     delimiter: string = '_'
   ) {
     this.delimiter = delimiter;
-    this.type = this.formatType(actionTypePartials);
+    this.type = this._formatType(actionTypePartials);
     this.create = this.create.bind(this);
   }
 
-  protected formatType(actionNaming: TActionNamingPartials): Action['type'] {
-    if(this.condition) {
-      actionNaming.push(this.condition)
+  protected _formatType(actionNaming: TActionNamingPartials): Action['type'] {
+    if(this._condition) {
+      actionNaming.push(this._condition)
     }
 
     return actionNaming

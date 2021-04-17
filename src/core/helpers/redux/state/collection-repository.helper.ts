@@ -3,7 +3,7 @@ import { AbstractRepository } from "./abstract.repository";
 import { StateRepository } from "./state.repository";
 import { IEntity } from "./types";
 
-export class CollectionRepositoryManager<
+export class CollectionRepositoryHelper<
   State extends Record<IEntity['id'],
   IEntity> = Record<IEntity['id'], IEntity>,
   P extends State[keyof State] = State[keyof State]

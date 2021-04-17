@@ -21,7 +21,7 @@ import { Reducer } from 'redux';
 import ReduxTypes from 'ReduxTypes';
 import { RootException } from "@core/exceptions/variations";
 import { ClassConstructor } from "Utils";
-import { AbstractRepository, StateHelper, DefaultStrategy } from "./state";
+import { AbstractRepository, StateRepository, DefaultStrategy } from "./state";
 import { Method } from 'axios';
 
 type TActionCreatorProvider<Action extends BaseAction> = (
@@ -58,8 +58,13 @@ type TSyncActionCreator = <Payload>(
   customActionCreators?: TActionCreatorProvider<BaseAction<Payload>>
 ) => TActionCreator<RootAction<Payload>>;
 
-type TReducerHandler<State extends ReduxTypes.State> = <Repository>(repository: Repository extends AbstractRepository<State> ? Repository : never) => Record<BaseAction['type'], Reducer<State, BaseAction>>;
-type TReducerCreator<State extends ReduxTypes.State> = (reducerHandlers: TReducerHandler<State>, initialState: State) => Reducer<State, BaseAction>;
+type TReducerHandler<State extends ReduxTypes.State> = <Repository>(
+  repository: Repository extends AbstractRepository<State> ? Repository : never
+) => Record<BaseAction['type'], Reducer<State, BaseAction>>;
+
+type TReducerCreator<State extends ReduxTypes.State> = (
+  reducerHandlers: TReducerHandler<State>, initialState: State
+) => Reducer<State, BaseAction>;
 
 interface IReduxModuleHelper<State extends ReduxTypes.State> {
   sync: TSyncActionCreator;
@@ -70,10 +75,10 @@ interface IReduxModuleHelper<State extends ReduxTypes.State> {
 export class ReduxModuleHelper<State extends object> implements IReduxModuleHelper<State> {
   constructor(
     public readonly moduleName: ReduxTypes.StatePartitions,
-    private readonly Repository: ClassConstructor<AbstractRepository<State>>
+    private readonly _RepositoryHelper: ClassConstructor<AbstractRepository<State>>
   ) {}
 
-  private actionCreatorFactory<Action extends BaseAction>(
+  private _actionCreatorFactory<Action extends BaseAction>(
     actionCreatorHelper: AbstractActionCreatorHelper<Action>,
     customActionCreator?: TActionCreatorProvider<Action>
   ): TActionCreator<Action> {
@@ -89,20 +94,19 @@ export class ReduxModuleHelper<State extends object> implements IReduxModuleHelp
     })
   }
 
-
   public sync<Payload>(
     actionNamingPartials: [ ...Array<string> ],
     customActionCreator?: TActionCreatorProvider<BaseAction<Payload>>
   ): TActionCreator<BaseAction<Payload>> {
     const syncHelper: SyncActionCreatorHelper<Payload> = new SyncActionCreatorHelper([this.moduleName, ...actionNamingPartials]);
 
-    return this.actionCreatorFactory(syncHelper, customActionCreator);
+    return this._actionCreatorFactory(syncHelper, customActionCreator);
   }
 
   public reducer(reducerHandler: TReducerHandler<State>, initialState: State): Reducer<State, BaseAction> {
     return (state: State = initialState, action: BaseAction) => {
-      const helper = new StateHelper(state, new DefaultStrategy());
-      const repository = new this.Repository(helper);
+      const stateRepository = new StateRepository(state, new DefaultStrategy());
+      const repository = new this._RepositoryHelper(stateRepository);
       const actionHandlers = reducerHandler(repository);
       if(action.type in actionHandlers) {
         return actionHandlers[action.type](state, action);
@@ -119,17 +123,17 @@ export class ReduxModuleHelper<State extends object> implements IReduxModuleHelp
     const actionNamePartials: TActionNamingPartials = [ this.moduleName, ...namePartials ];
 
     const triggeredHelper: TriggeredActionCreatorHelper<Triggered> = new TriggeredActionCreatorHelper<Triggered>(actionNamePartials);
-    const triggered: TActionCreator<TriggeredAction<Triggered>> = this.actionCreatorFactory<
+    const triggered: TActionCreator<TriggeredAction<Triggered>> = this._actionCreatorFactory<
       TriggeredAction<Triggered>
     >(triggeredHelper, customActionCreators?.triggered);
 
     const failureHelper: FailureActionCreatorHelper<Failure> = new FailureActionCreatorHelper<Failure>(actionNamePartials);
-    const failure: TActionCreator<FailureAction<Failure>> = this.actionCreatorFactory<
+    const failure: TActionCreator<FailureAction<Failure>> = this._actionCreatorFactory<
       FailureAction<Failure>
     >(failureHelper, (customActionCreators?.failure as any));
 
     const successfulHelper: SuccessfulActionCreatorHelper<Successful> = new SuccessfulActionCreatorHelper<Successful>(actionNamePartials);
-    const successful: TActionCreator<SuccessfulAction<Successful>> = this.actionCreatorFactory<
+    const successful: TActionCreator<SuccessfulAction<Successful>> = this._actionCreatorFactory<
       SuccessfulAction<Successful>
     >(successfulHelper, customActionCreators?.successful);
 
@@ -140,4 +144,3 @@ export class ReduxModuleHelper<State extends object> implements IReduxModuleHelp
     }
   }
 }
-

@@ -1,6 +1,6 @@
 import {TMeta} from "@core/transport";
-import {ConditionStatus} from "@core/helpers/redux/actions/options";
-import {RootAction} from "@core/helpers/redux/actions/root.action";
+import {ConditionStatus} from './options';
+import {RootAction} from './root.action';
 
 export class BaseAction<Payload = any> implements RootAction {
   public readonly type!: string;
