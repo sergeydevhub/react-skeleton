@@ -80,7 +80,7 @@ const Root: React.FC<{}> = () => {
                     </Route>
                     <Route exact path={paths.NOT_FOUND}>
                       <SecondaryLayout>
-                        <ErrorPageComponent />
+                        <NotFoundPage />
                       </SecondaryLayout>
                     </Route>
                     <Route>
