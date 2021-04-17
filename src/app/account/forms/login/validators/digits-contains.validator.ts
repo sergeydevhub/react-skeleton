@@ -17,6 +17,6 @@ export class DigitsContainsValidator extends AbstractHandlerMiddleware<Array<str
 
     this.message = `Field contains only ${ amount } of ${this._amount} required`;
 
-    return amount >= this._amount && this.checkNext(field);
+    return amount >= this._amount && this._checkNext(field);
   }
 }

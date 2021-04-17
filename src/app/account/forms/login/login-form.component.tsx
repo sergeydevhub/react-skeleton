@@ -29,8 +29,8 @@ class LoginFormComponent extends React.Component<Props, State> {
     this._emailValidator = new EmailValidator();
 
     this._passwordValidator = new PasswordLengthValidator(16);
-    this._passwordValidator.register(new CapitalsContainsValidator(2));
-    this._passwordValidator.register(new DigitsContainsValidator(3));
+    this._passwordValidator.register(new CapitalsContainsValidator(2))
+      .register(new DigitsContainsValidator(3));
   }
 
   validate = (values: FormValues): object => {

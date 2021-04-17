@@ -6,6 +6,7 @@ export class EmailValidator extends AbstractHandlerMiddleware<string> {
 
   public isAllowed(email: string): boolean {
     this.message = 'Email is invalid';
-    return isEmail(email) && this.checkNext(email);
+
+    return isEmail(email) && this._checkNext(email);
   }
 }

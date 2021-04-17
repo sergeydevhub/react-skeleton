@@ -12,6 +12,6 @@ export class PasswordLengthValidator extends AbstractHandlerMiddleware<Array<str
   public isAllowed(password: Array<string>): boolean {
     this.message = `Password contains ${ password.length } of ${this._allowedLength} required`;
 
-    return password.length >= this._allowedLength && this.checkNext(password);
+    return password.length >= this._allowedLength && this._checkNext(password);
   }
 }
