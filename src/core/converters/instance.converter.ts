@@ -19,7 +19,7 @@ export class ClassConverter<Input, Output> extends AbstractConverter<Input, Outp
     return this.from(from);
   }
 
-  protected to(
+  public to(
     from: Input,
     to: ClassConstructor<Output>,
     options?: ClassTransformOptions
@@ -27,7 +27,7 @@ export class ClassConverter<Input, Output> extends AbstractConverter<Input, Outp
     return plainToClass(to, from)
   }
 
-  protected from(
+  public from(
     input: Input,
     options?: ClassTransformOptions
   ): Output {

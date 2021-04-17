@@ -9,24 +9,25 @@ export class StateHelper<State extends object> {
   ) {}
 
   public save(payload: any, key?: keyof State): void {
-    const newState = this._strategy.transform(payload, key);
-    produce(this._state, (draft: State) => {
-        draft = this.merge(draft, newState);
-        this.setState(draft);
+    const newPatch = this._strategy.transform(payload, key);
+    const state: State = produce(this._state, (draft: State) => {
+        draft = this._merge(draft, newPatch);
     });
+
+    this._setState(state);
   }
 
   public remove(key: keyof State | number): void {
-    produce(this._state, (draft: State) => {
+    const state: State = produce(this._state, (draft: State) => {
       if(Array.isArray(draft) && draft[key]) {
         const index = key as number;
         draft.splice(index, 1);
       } else {
         delete draft[(key as keyof State)];
       }
-
-      this.setState(draft);
     });
+
+    this._setState(state);
   }
 
   public update(payload: any, key?: keyof State): void {
@@ -41,11 +42,11 @@ export class StateHelper<State extends object> {
     return this._state;
   }
 
-  private setState(newState: State): State {
-    return this.merge(this._state, newState);
+  private _setState(newState: State): State {
+    return this._merge(this._state, newState);
   }
 
-  private merge(state: State, newState: State): State {
+  private _merge(state: State, newState: State): State {
     return deepmerge(state, newState);
   }
 }

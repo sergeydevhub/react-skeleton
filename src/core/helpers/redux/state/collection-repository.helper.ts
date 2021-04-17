@@ -1,9 +1,9 @@
 import { CollectionStrategy, IStrategy } from "./transform.strategy";
 import { AbstractRepository } from "./abstract.repository";
-import { StateHelper } from "./state.helper";
+import { StateRepository } from "./state.repository";
 import { IEntity } from "./types";
 
-export class CollectionRepository<
+export class CollectionRepositoryManager<
   State extends Record<IEntity['id'],
   IEntity> = Record<IEntity['id'], IEntity>,
   P extends State[keyof State] = State[keyof State]
@@ -11,7 +11,7 @@ export class CollectionRepository<
   public readonly defaultStrategy: IStrategy<State> = new CollectionStrategy<State>();
 
   constructor(
-    context: StateHelper<State>,
+    context: StateRepository<State>,
   ) {
     super(context);
     this._context.setStrategy(this.defaultStrategy);
