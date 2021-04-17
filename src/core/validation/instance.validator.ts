@@ -30,7 +30,7 @@ export class InstanceValidator<T extends object> implements IValidator<T> {
       forbidNonWhitelisted: true
     }): Array<ValidationError | TypeError> {
     if(!(this.isInherited(data))) {
-      const converter = new InstanceConverter<T, Object>();
+      const converter = new InstanceConverter<object, T>();
       data = converter.to(data, this._Origin);
     }
 
