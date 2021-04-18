@@ -33,7 +33,7 @@ const Wrapper: React.ExoticComponent<
   ? React.StrictMode
   : React.Fragment;
 
-const Root: React.FC<{}> = () => {
+const Root: React.FC = () => {
   return (
     <Wrapper>
       <Provider store={ store }>
