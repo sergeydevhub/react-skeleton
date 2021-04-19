@@ -26,6 +26,6 @@
 - Typed localization
 - Redux middleware errors capturing
 - Auxiliary service pages  
-- Authentication page
+- Login page
 - Toggle UI conditions HOC
 - Redux custom types 
