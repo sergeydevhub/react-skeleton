@@ -1,5 +1,6 @@
 import { Reducer }  from "redux";
 import { ObjectRepositoryHelper } from "@core/helpers/redux/state";
+import { BaseAction } from "@core/helpers/redux/actions";
 import { ReduxModuleHelper } from "@core/helpers/redux";
 import { getPredefinedLanguage } from "@core/utils";
 import { LocalizationEntity } from "./data";
@@ -14,7 +15,7 @@ const localizationModule = new ReduxModuleHelper<TState>('localization', ObjectR
 
 const switchLang = localizationModule.sync<TAvailableLangs>(['switch']);
 
-export const reducer = localizationModule.reducer(
+export const reducer: Reducer<TState, BaseAction> = localizationModule.reducer(
   (repository: ObjectRepositoryHelper<TState>) => ({
   [switchLang.type]: (
     state: TState = { ...initialState },
