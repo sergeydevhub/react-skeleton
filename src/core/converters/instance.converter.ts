@@ -15,7 +15,7 @@ export class InstanceConverter<Input extends Instance, Output extends Instance>
   }
 
   public to(
-    from: object,
+    from: Instance,
     to: ClassConstructor<Output>,
     options?: ClassTransformOptions
   ): Output {
@@ -23,7 +23,7 @@ export class InstanceConverter<Input extends Instance, Output extends Instance>
   }
 
   public from(
-    input: object,
+    input: Instance,
     options?: ClassTransformOptions
   ): Output {
     return classToPlain(input) as Output;
