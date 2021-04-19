@@ -1,6 +1,7 @@
+import { Reducer } from 'redux';
 import { ReduxModuleHelper } from '@core/helpers/redux';
 import { ObjectRepositoryHelper } from "@core/helpers/redux/state";
-import { RootAction } from "@core/helpers/redux/actions";
+import {BaseAction, RootAction} from "@core/helpers/redux/actions";
 import * as ReduxTypes from 'ReduxTypes';
 
 export type TState = Record<ReduxTypes.StatePartitions, any> | object;
@@ -12,7 +13,7 @@ const resetToDefault = appModule.sync(['reset', 'default']);
 
 export const initialState: Partial<TState> = {};
 
-export const reducer = appModule.reducer(
+export const reducer: Reducer<TState, BaseAction> = appModule.reducer(
 (repository: ObjectRepositoryHelper<TState>) => ({
   [resetToDefault.type]: (state: TState = initialState, action: RootAction) => initialState
 }), initialState);
