@@ -8,8 +8,7 @@ import * as Sentry from '@sentry/browser';
 import { AbstractHttpClient, HttpClient } from "@core/transport";
 import { HTTPResponseException, CommonException, RootException } from '@core/exceptions/variations';
 import { TriggeredAction } from "@core/helpers/redux/actions";
-import { paths } from '@core/routing/routes';
-import { history } from '@core/routing';
+import { paths, history } from '@core/routing';
 
 type TWorkerRuntimeEnv<T> = (worker: TWorker<T>) => (...args: any[]) => any
 
@@ -18,7 +17,7 @@ type TWorker<T> = (
   action: TriggeredAction<T>,
 ) => Promise<unknown> | SagaIterator
 
-export function sagaWorkerService<T, E extends RootException, S>(
+export function sagaWorkerService<T, E extends RootException, S extends object>(
   actionCreators: TConditionalActionCreators<T, E, S>
 ): TWorkerRuntimeEnv<T> {
   return (worker: TWorker<T>) => {
@@ -29,6 +28,7 @@ export function sagaWorkerService<T, E extends RootException, S>(
       try {
         const httpClient: AbstractHttpClient = HttpClient.getInstance();
         const result = yield (call as any)(worker, httpClient, action, ...args);
+
         yield put(actionCreators.successful(result));
 
       } catch (e) {
@@ -57,7 +57,7 @@ export function sagaWorkerService<T, E extends RootException, S>(
           },
         };
 
-        const statusCode: HttpStatusCodes = e.status;
+        const statusCode: HttpStatusCodes = error.statusCode;
 
         if(statusCode in responseHandlers) {
          (responseHandlers[statusCode] as any)()
