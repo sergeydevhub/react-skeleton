@@ -43,7 +43,7 @@ export class InstanceValidator<T extends object> implements IValidator<T> {
     return errors;
   }
 
-  public isValid<Data>(data: Data extends T ? Data : unknown): boolean {
+  public isValid(data: unknown): boolean {
     if(!InstanceValidator.isObject(data)) {
       return false
     }
