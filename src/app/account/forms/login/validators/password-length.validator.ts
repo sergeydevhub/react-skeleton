@@ -1,6 +1,6 @@
 import {AbstractHandlerMiddleware} from "@core/middlewares";
 
-export class PasswordLengthValidator extends AbstractHandlerMiddleware<Array<string>> {
+export class LengthValidator extends AbstractHandlerMiddleware<Array<string>> {
   public message: string = '';
   private readonly _allowedLength: number;
 
@@ -10,7 +10,7 @@ export class PasswordLengthValidator extends AbstractHandlerMiddleware<Array<str
   }
 
   public isAllowed(password: Array<string>): boolean {
-    this.message = `Password contains ${ password.length } of ${this._allowedLength} required`;
+    this.message = `Field contains ${ password.length } of ${this._allowedLength} required`;
 
     return password.length >= this._allowedLength && this._checkNext(password);
   }
