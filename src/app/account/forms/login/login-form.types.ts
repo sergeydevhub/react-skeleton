@@ -1,11 +1,9 @@
 import { ConnectedProps } from "react-redux";
+import { TLoginDTO } from "@modules/profile/root/api/types";
 import { connector } from './login-form.container';
 
-export type ComponentProps = & ConnectedProps<typeof connector>;
+export type TComponentProps = & ConnectedProps<typeof connector>;
 
-export interface FormValues {
-  email: string;
-  password: string;
-}
+export interface IFormValues extends TLoginDTO {}
 
-export type ComponentState = FormValues & {};
+export type TComponentState = IFormValues & {};

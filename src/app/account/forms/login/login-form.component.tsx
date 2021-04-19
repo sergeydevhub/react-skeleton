@@ -4,18 +4,18 @@ import { FormattedMessage } from "react-intl";
 import { TextField } from "@core/forms/fields";
 import { Field, Form, Formik, } from "formik";
 import Button from "@material-ui/core/Button"
-import { ComponentProps as Props, ComponentState as State, FormValues } from './login-form.types';
+import { TComponentProps as Props, TComponentState as State, IFormValues } from './login-form.types';
 import messages from "./messages";
 import { capitalize } from "lodash";
 import { AbstractHandlerMiddleware } from "@core/middlewares";
 import {
-  PasswordLengthValidator,
+  LengthValidator,
   CapitalsContainsValidator,
   DigitsContainsValidator,
   EmailValidator
 } from './validators';
 
-type FormProps = FormikConfig<Readonly<FormValues>> & FormikState<FormValues>;
+type FormProps = FormikConfig<Readonly<IFormValues>> & FormikState<IFormValues>;
 
 class LoginFormComponent extends React.Component<Props, State> {
   private _emailValidator: AbstractHandlerMiddleware<string>;
@@ -28,12 +28,12 @@ class LoginFormComponent extends React.Component<Props, State> {
 
     this._emailValidator = new EmailValidator();
 
-    this._passwordValidator = new PasswordLengthValidator(16);
+    this._passwordValidator = new LengthValidator(16);
     this._passwordValidator.register(new CapitalsContainsValidator(2))
       .register(new DigitsContainsValidator(3));
   }
 
-  validate = (values: FormValues): object => {
+  validate = (values: IFormValues): object => {
     const defaultMessage: string = '';
 
     const email: string = !this._emailValidator.isAllowed(values.email)
@@ -50,7 +50,7 @@ class LoginFormComponent extends React.Component<Props, State> {
     }
   };
 
-  isValid = (errors: FormikErrors<FormValues>): boolean => {
+  isValid = (errors: FormikErrors<IFormValues>): boolean => {
     return !!Object.values(errors).filter(Boolean).length;
   };
 
@@ -61,7 +61,7 @@ class LoginFormComponent extends React.Component<Props, State> {
     this.setState({ ...this.state, [field]: value });
   };
 
-  onSubmit = (values: FormValues, helpers: FormikHelpers<FormValues>): void => {
+  onSubmit = (values: IFormValues, helpers: FormikHelpers<IFormValues>): void => {
     helpers.setSubmitting(true);
 
     const meta = {
